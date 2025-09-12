@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AudioCrypt - Secure Audio File Encryption</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                font-family: 'Poppins', sans-serif;
+            }
+        }
+        @layer components {
+            .btn-gradient {
+                background: linear-gradient(135deg, #2563eb, #6366f1);
+                transition: all 0.3s ease;
+            }
+            .btn-gradient:hover {
+                background: linear-gradient(135deg, #1d4ed8, #4338ca);
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+            }
+            .btn-secondary {
+                background: linear-gradient(135deg, #10b981, #0d9488);
+                transition: all 0.3s ease;
+            }
+            .btn-secondary:hover {
+                background: linear-gradient(135deg, #059669, #0f766e);
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+            }
+            .bg-ac-gradient {
+                background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #1e3a8a);
+                background-size: 400% 400%;
+                animation: gradientShift 15s ease infinite;
+            }
+            .glass-card {
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(20px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+            .feature-card {
+                background: rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                transition: all 0.3s ease;
+            }
+            .feature-card:hover {
+                background: rgba(255, 255, 255, 0.1);
+                transform: translateY(-4px);
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            }
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        .animate-slide-in-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+        .animate-slide-in-right {
+            animation: slideInRight 0.8s ease-out forwards;
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        .delay-600 { animation-delay: 0.6s; }
+    </style>
+</head>
+<body class="min-h-screen bg-ac-gradient text-white overflow-x-hidden">
+    
+    <!-- Hero Section -->
+    <div class="relative min-h-screen flex items-center justify-center px-4">
+        <div class="absolute inset-0 bg-black/20"></div>
+        
+        <div class="relative max-w-6xl mx-auto text-center">
+            <!-- Main Heading -->
+            <div class="mb-12">
+                <h1 class="text-6xl md:text-7xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 animate-fade-in-up">
+                    AudioCrypt
+                </h1>
+                <p class="text-2xl md:text-3xl font-light mb-4 text-gray-200 animate-fade-in-up delay-100">
+                    Enterprise-Grade Audio File Encryption
+                </p>
+                <p class="text-lg text-gray-300 max-w-2xl mx-auto animate-fade-in-up delay-200">
+                    Protect your audio files with military-grade RSA-4096 + AES-GCM encryption. 
+                    Secure, fast, and completely private.
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-16">
+                <a href="/register" class="btn-gradient text-white px-10 py-4 rounded-full text-lg font-semibold shadow-lg transition-all duration-300 animate-slide-in-left delay-300">
+                    🚀 Get Started Free
+                </a>
+                <a href="/login" class="btn-secondary text-white px-10 py-4 rounded-full text-lg font-semibold shadow-lg transition-all duration-300 animate-slide-in-right delay-400">
+                    🔐 Login
+                </a>
+                <a href="/about" class="bg-transparent border-2 border-white/30 text-white px-10 py-4 rounded-full text-lg font-semibold hover:bg-white/10 transition-all duration-300 animate-fade-in-up delay-500">
+                    📖 Learn More
+                </a>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="animate-bounce animate-fade-in-up delay-600">
+                <svg class="w-6 h-6 mx-auto text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- What is AudioCrypt Section -->
+    <section class="py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
+                    What is AudioCrypt?
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    AudioCrypt is a state-of-the-art web application designed to provide 
+                    enterprise-level encryption for your audio files. Built with modern cryptographic 
+                    standards and a user-friendly interface.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="glass-card p-8 rounded-2xl">
+                    <h3 class="text-2xl font-semibold mb-4 text-blue-400">🔒 Why Choose AudioCrypt?</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-3">✓</span>
+                            <span><strong>Military-Grade Security:</strong> RSA-4096 + AES-GCM hybrid encryption</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-3">✓</span>
+                            <span><strong>Zero-Knowledge Architecture:</strong> Your keys, your data, your control</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-3">✓</span>
+                            <span><strong>Multiple Formats:</strong> MP3, WAV, FLAC, OGG, M4A support</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-3">✓</span>
+                            <span><strong>Fast & Reliable:</strong> Optimized for performance and stability</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="glass-card p-8 rounded-2xl">
+                    <h3 class="text-2xl font-semibold mb-4 text-purple-400">🎯 Perfect For</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start">
+                            <span class="text-blue-400 mr-3">🎵</span>
+                            <span><strong>Musicians & Producers:</strong> Protect unreleased tracks and demos</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-400 mr-3">🏢</span>
+                            <span><strong>Businesses:</strong> Secure confidential audio communications</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-400 mr-3">🎙️</span>
+                            <span><strong>Podcasters:</strong> Protect premium content and interviews</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-400 mr-3">🔐</span>
+                            <span><strong>Privacy Enthusiasts:</strong> Keep personal recordings secure</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 px-4 bg-black/20">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+                    Powerful Features
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Everything you need to securely encrypt, store, and manage your audio files 
+                    with complete peace of mind.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="feature-card p-6 rounded-xl text-center">
+                    <div class="text-4xl mb-4">🛡️</div>
+                    <h3 class="text-xl font-semibold mb-3 text-blue-400">Bank-Level Security</h3>
+                    <p class="text-gray-300">
+                        RSA-4096 asymmetric encryption combined with AES-GCM 
+                        provides the same security standards used by financial institutions.
+                    </p>
+                </div>
+
+                <div class="feature-card p-6 rounded-xl text-center">
+                    <div class="text-4xl mb-4">⚡</div>
+                    <h3 class="text-xl font-semibold mb-3 text-green-400">Lightning Fast</h3>
+                    <p class="text-gray-300">
+                        Optimized hybrid encryption ensures fast processing 
+                        even for large audio files up to 16MB.
+                    </p>
+                </div>
+
+                <div class="feature-card p-6 rounded-xl text-center">
+                    <div class="text-4xl mb-4">🎵</div>
+                    <h3 class="text-xl font-semibold mb-3 text-purple-400">Format Preservation</h3>
+                    <p class="text-gray-300">
+                        Your files maintain their original format and quality 
+                        after decryption - no loss, no conversion.
+                    </p>
+                </div>
+
+                <div class="feature-card p-6 rounded-xl text-center">
+                    <div class="text-4xl mb-4">🔑</div>
+                    <h3 class="text-xl font-semibold mb-3 text-cyan-400">Your Keys, Your Control</h3>
+                    <p class="text-gray-300">
+                        Generate your own RSA key pairs. We never have access 
+                        to your private keys or unencrypted data.
+                    </p>
+                </div>
+
+                <div class="feature-card p-6 rounded-xl text-center">
+                    <div class="text-4xl mb-4">📱</div>
+                    <h3 class="text-xl font-semibold mb-3 text-indigo-400">Modern Interface</h3>
+                    <p class="text-gray-300">
+                        Beautiful, responsive design that works seamlessly 
+                        across all devices and browsers.
+                    </p>
+                </div>
+
+                <div class="feature-card p-6 rounded-xl text-center">
+                    <div class="text-4xl mb-4">🚀</div>
+                    <h3 class="text-xl font-semibold mb-3 text-rose-400">Easy to Use</h3>
+                    <p class="text-gray-300">
+                        Simple drag-and-drop interface. Encrypt and decrypt 
+                        files with just a few clicks.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-400">
+                    How It Works
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    AudioCrypt uses a sophisticated hybrid encryption system that combines 
+                    the best of both asymmetric and symmetric cryptography.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="glass-card w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                        1️⃣
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2 text-blue-400">Register & Get Keys</h3>
+                    <p class="text-gray-300 text-sm">
+                        Create your account and receive a unique RSA-4096 key pair 
+                        generated securely on our servers.
+                    </p>
+                </div>
+
+                <div class="text-center">
+                    <div class="glass-card w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                        2️⃣
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2 text-green-400">Upload & Encrypt</h3>
+                    <p class="text-gray-300 text-sm">
+                        Upload your audio files. We generate a random AES key, 
+                        encrypt your file, then encrypt the AES key with your RSA public key.
+                    </p>
+                </div>
+
+                <div class="text-center">
+                    <div class="glass-card w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                        3️⃣
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2 text-purple-400">Secure Storage</h3>
+                    <p class="text-gray-300 text-sm">
+                        Your encrypted files are stored securely. Only you can 
+                        decrypt them using your private key.
+                    </p>
+                </div>
+
+                <div class="text-center">
+                    <div class="glass-card w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                        4️⃣
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2 text-cyan-400">Download & Decrypt</h3>
+                    <p class="text-gray-300 text-sm">
+                        Decrypt your files instantly. The original format and 
+                        quality are perfectly preserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Details Section -->
+    <section class="py-20 px-4 bg-black/20">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-yellow-400">
+                Uncompromising Security
+            </h2>
+            
+            <div class="glass-card p-8 rounded-2xl mb-8">
+                <h3 class="text-2xl font-semibold mb-4 text-yellow-400">🔐 Technical Specifications</h3>
+                <div class="grid md:grid-cols-2 gap-6 text-left">
+                    <div>
+                        <h4 class="font-semibold text-blue-400 mb-2">Asymmetric Encryption:</h4>
+                        <ul class="text-gray-300 text-sm space-y-1">
+                            <li>• RSA-4096 bit keys</li>
+                            <li>• OAEP padding with SHA-256</li>
+                            <li>• Cryptographically secure random generation</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-green-400 mb-2">Symmetric Encryption:</h4>
+                        <ul class="text-gray-300 text-sm space-y-1">
+                            <li>• AES-256 in GCM mode</li>
+                            <li>• 96-bit random nonces</li>
+                            <li>• Authenticated encryption</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-xl">
+                <p class="text-gray-300 mb-4">
+                    <strong class="text-white">Zero-Knowledge Architecture:</strong> 
+                    We never store your private keys or have access to your unencrypted data. 
+                    Your security is entirely in your hands.
+                </p>
+                <p class="text-sm text-gray-400">
+                    Trusted by security professionals • Open for security audits • GDPR Compliant
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white">
+                Ready to Secure Your Audio Files?
+            </h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Join thousands of users who trust AudioCrypt to protect their valuable audio content. 
+                Start encrypting your files today - it's free and takes less than a minute.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="/register" class="btn-gradient text-white px-12 py-4 rounded-full text-xl font-semibold shadow-lg transition-all duration-300 hover:scale-105">
+                    🚀 Start Encrypting Now
+                </a>
+                <a href="/about" class="bg-transparent border-2 border-white/30 text-white px-12 py-4 rounded-full text-xl font-semibold hover:bg-white/10 transition-all duration-300">
+                    📚 View Documentation
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 px-4 border-t border-white/10">
+        <div class="max-w-6xl mx-auto text-center">
+            <p class="text-gray-400 mb-2">
+                © 2025 AudioCrypt. Built with ❤️ for audio security and privacy.
+            </p>
+            <p class="text-sm text-gray-500">
+                Enterprise-grade encryption • Zero-knowledge architecture • Open source security
+            </p>
+        </div>
+    </footer>
+
+    <!-- Background Animation -->
+    <script>
+        // Add some interactive background elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Add scroll-triggered animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all animated elements
+            document.querySelectorAll('[class*="animate-"]').forEach(el => {
+                el.style.animationPlayState = 'paused';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Encryption - AudioCrypt</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                font-family: 'Poppins', sans-serif;
+            }
+        }
+        @layer components {
+            .btn-gradient {
+                background: linear-gradient(135deg, #2563eb, #6366f1);
+                transition: all 0.3s ease;
+            }
+            .btn-gradient:hover {
+                background: linear-gradient(135deg, #1d4ed8, #4338ca);
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+            }
+            .btn-secondary {
+                background: linear-gradient(135deg, #10b981, #0d9488);
+                transition: all 0.3s ease;
+            }
+            .btn-secondary:hover {
+                background: linear-gradient(135deg, #059669, #0f766e);
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+            }
+            .bg-ac-gradient {
+                background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #1e3a8a);
+                background-size: 400% 400%;
+                animation: gradientShift 15s ease infinite;
+            }
+            .glass-card {
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(20px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+                transition: all 0.3s ease;
+            }
+            .glass-card:hover {
+                background: rgba(255, 255, 255, 0.15);
+                transform: translateY(-2px);
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+            }
+            .file-upload {
+                border: 2px dashed rgba(255, 255, 255, 0.3);
+                background: rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(10px);
+                transition: all 0.3s ease;
+            }
+            .file-upload:hover {
+                border-color: rgba(59, 130, 246, 0.6);
+                background: rgba(59, 130, 246, 0.1);
+                transform: translateY(-2px);
+            }
+            .file-upload.drag-over {
+                border-color: rgba(16, 185, 129, 0.8);
+                background: rgba(16, 185, 129, 0.15);
+                transform: scale(1.02);
+            }
+            .form-input {
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                transition: all 0.3s ease;
+            }
+            .form-input:focus {
+                border-color: rgba(59, 130, 246, 0.6);
+                box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+                background: rgba(255, 255, 255, 0.15);
+            }
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body class="min-h-screen bg-ac-gradient text-white">
+    
+    <!-- Navigation Header -->
+    <nav class="glass-card border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="/options" class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400">
+                        AudioCrypt
+                    </a>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/options" class="text-gray-300 hover:text-white transition-colors duration-300">Dashboard</a>
+                    <a href="/audio_encryption" class="text-blue-400 font-medium">Encrypt</a>
+                    <a href="/audio_decryption" class="text-gray-300 hover:text-white transition-colors duration-300">Decrypt</a>
+                    <a href="/my_files" class="text-gray-300 hover:text-white transition-colors duration-300">My Files</a>
+                </div>
+                
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    <a href="/logout" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        
+        <!-- Header Section -->
+        <div class="text-center mb-12 animate-fade-in-up">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400">
+                🔐 Encrypt Audio Files
+            </h1>
+            <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                Secure your audio files with military-grade RSA-4096 + AES-GCM encryption.
+                Your files will be protected with unbreakable security.
+            </p>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="mb-8">
+                    {% for message in messages %}
+                        <div class="bg-green-500/10 border border-green-500/30 text-green-400 px-6 py-4 rounded-lg mb-4 animate-fade-in-up">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                {{ message }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Success/Error Messages -->
+        {% if success_message %}
+        <div class="mb-8 bg-green-500/10 border border-green-500/30 text-green-400 px-6 py-4 rounded-lg animate-fade-in-up">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                {{ success_message }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if error_message %}
+        <div class="mb-8 bg-red-500/10 border border-red-500/30 text-red-400 px-6 py-4 rounded-lg animate-fade-in-up">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+                {{ error_message }}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Encryption Form -->
+        <div class="glass-card rounded-2xl p-8 mb-8 animate-fade-in-up delay-200">
+            <div class="mb-6">
+                <h2 class="text-2xl font-semibold text-white mb-2">📁 Select Audio Files</h2>
+                <p class="text-gray-300">Supported formats: MP3, WAV, FLAC, OGG, M4A</p>
+            </div>
+
+            <form action="/audio_encryption" method="POST" enctype="multipart/form-data" id="encryptionForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                
+                <!-- File Upload Area -->
+                <div class="file-upload rounded-xl p-8 text-center cursor-pointer mb-6" id="fileUploadArea">
+                    <div class="flex flex-col items-center">
+                        <svg class="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                        <h3 class="text-xl font-semibold text-white mb-2">Drop files here or click to browse</h3>
+                        <p class="text-gray-400 mb-4">Maximum file size: 500MB per file</p>
+                        <label for="fileInput" class="sr-only">Select audio files for encryption</label>
+                        <input type="file" name="audio_files" multiple required 
+                               accept=".mp3,.wav,.flac,.ogg,.m4a"
+                               class="hidden" id="fileInput"
+                               aria-label="Select audio files for encryption">
+                        <button type="button" onclick="document.getElementById('fileInput').click()" 
+                                class="bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 px-6 py-3 rounded-lg font-medium transition-all duration-300">
+                            Choose Files
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Selected Files Display -->
+                <div id="selectedFiles" class="hidden mb-6">
+                    <h3 class="text-lg font-semibold text-white mb-3">Selected Files:</h3>
+                    <div id="fileList" class="space-y-2"></div>
+                </div>
+
+                <!-- Encrypt Button -->
+                <div class="text-center">
+                    <button type="submit" name="action" value="encrypt" 
+                            class="btn-secondary w-full md:w-auto px-8 py-4 rounded-xl text-lg font-semibold text-white shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                            id="encryptButton" disabled>
+                        <span class="flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                            Encrypt Files
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Download Encrypted Files -->
+        {% if encrypted_files %}
+        <div class="glass-card rounded-2xl p-8 animate-fade-in-up delay-400">
+            <h2 class="text-2xl font-semibold text-white mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-3 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 12l2 2 4-4"></path>
+                </svg>
+                Encrypted Files Ready
+            </h2>
+            
+            <div class="grid gap-4">
+                {% for file in encrypted_files %}
+                <div class="bg-white/5 rounded-xl p-4 border border-white/10">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-white">{{ file.original_filename }}</h3>
+                            <p class="text-sm text-gray-400">Encrypted as: {{ file.encrypted_filename }}</p>
+                            <p class="text-sm text-gray-400">Size: {{ (file.file_size / 1024) | round(2) }} KB</p>
+                        </div>
+                        <a href="{{ url_for('download_encrypted_file', filename=file.encrypted_filename) }}" 
+                           class="btn-gradient px-6 py-3 rounded-lg text-white font-medium text-sm transition-all duration-300 flex items-center space-x-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-4-4m4 4l4-4m-6 8h8a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2-2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>Download</span>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Security Info -->
+        <div class="mt-12 text-center animate-fade-in-up delay-300">
+            <p class="text-gray-400 mb-4">🛡️ Your files are protected with:</p>
+            <div class="flex justify-center space-x-8 text-sm">
+                <div class="text-blue-400">
+                    <div class="font-semibold">RSA-4096</div>
+                    <div class="text-gray-500">Key Exchange</div>
+                </div>
+                <div class="text-green-400">
+                    <div class="font-semibold">AES-256-GCM</div>
+                    <div class="text-gray-500">File Encryption</div>
+                </div>
+                <div class="text-purple-400">
+                    <div class="font-semibold">Zero-Knowledge</div>
+                    <div class="text-gray-500">Privacy</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Elements -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
+        <div class="absolute top-3/4 left-3/4 w-48 h-48 bg-green-500/5 rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileInput = document.getElementById('fileInput');
+            const fileUploadArea = document.getElementById('fileUploadArea');
+            const selectedFiles = document.getElementById('selectedFiles');
+            const fileList = document.getElementById('fileList');
+            const encryptButton = document.getElementById('encryptButton');
+
+            // Handle file selection
+            fileInput.addEventListener('change', handleFileSelection);
+            
+            // Handle drag and drop
+            fileUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                fileUploadArea.classList.add('drag-over');
+            });
+
+            fileUploadArea.addEventListener('dragleave', () => {
+                fileUploadArea.classList.remove('drag-over');
+            });
+
+            fileUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                fileUploadArea.classList.remove('drag-over');
+                fileInput.files = e.dataTransfer.files;
+                handleFileSelection();
+            });
+
+            function handleFileSelection() {
+                const files = fileInput.files;
+                if (files.length > 0) {
+                    selectedFiles.classList.remove('hidden');
+                    encryptButton.disabled = false;
+                    
+                    fileList.innerHTML = '';
+                    Array.from(files).forEach(file => {
+                        const fileItem = document.createElement('div');
+                        fileItem.className = 'flex items-center justify-between bg-white/5 p-3 rounded-lg';
+                        fileItem.innerHTML = `
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-blue-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l6-6v13a4 4 0 11-6 6zm0 0l-6-6h6v6z"></path>
+                                </svg>
+                                <div>
+                                    <div class="text-white font-medium">${file.name}</div>
+                                    <div class="text-gray-400 text-sm">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+                                </div>
+                            </div>
+                            <div class="text-green-400 text-sm">Ready</div>
+                        `;
+                        fileList.appendChild(fileItem);
+                    });
+                } else {
+                    selectedFiles.classList.add('hidden');
+                    encryptButton.disabled = true;
+                }
+            }
+
+            // Form submission with loading state
+            document.getElementById('encryptionForm').addEventListener('submit', () => {
+                encryptButton.innerHTML = `
+                    <span class="flex items-center justify-center">
+                        <svg class="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Encrypting...
+                    </span>
+                `;
+                encryptButton.disabled = true;
+            });
+        });
+
+        // Flask template conditional alert
+        {% if alert_message %}
+        alert("{{ alert_message }}");
+        {% endif %}
+    </script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+# This file ensures the decrypted directory is tracked by git
+# Actual decrypted files will be ignored by .gitignore

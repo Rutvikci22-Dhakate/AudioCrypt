@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AudioCrypt</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                font-family: 'Poppins', sans-serif;
+            }
+        }
+        @layer components {
+            .btn-gradient {
+                background: linear-gradient(135deg, #2563eb, #6366f1);
+                transition: all 0.3s ease;
+            }
+            .btn-gradient:hover {
+                background: linear-gradient(135deg, #1d4ed8, #4338ca);
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+            }
+            .bg-ac-gradient {
+                background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #1e3a8a);
+                background-size: 400% 400%;
+                animation: gradientShift 15s ease infinite;
+            }
+            .glass-card {
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(20px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+            .form-input {
+                background: rgba(31, 41, 55, 0.4);
+                backdrop-filter: blur(16px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                transition: all 0.3s ease;
+            }
+            .form-input:focus {
+                background: rgba(31, 41, 55, 0.6);
+                border-color: rgba(99, 102, 241, 0.5);
+                box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            }
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        .animate-slide-in-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body class="min-h-screen bg-ac-gradient text-white flex items-center justify-center p-4">
+    
+    <!-- Background Elements -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- Login Container -->
+    <div class="relative w-full max-w-md">
+        <!-- Header -->
+        <div class="text-center mb-8 animate-fade-in-up">
+            <a href="/" class="inline-block mb-4 group">
+                <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 group-hover:scale-105 transition-transform duration-300">
+                    AudioCrypt
+                </h1>
+            </a>
+            <h2 class="text-2xl font-semibold mb-2 text-white">Welcome Back</h2>
+            <p class="text-gray-300">Sign in to your secure audio vault</p>
+        </div>
+
+        <!-- Login Form -->
+        <div class="glass-card rounded-2xl p-8 animate-slide-in-left delay-100">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="mb-6">
+                            {% for message in messages %}
+                                <div class="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg text-sm">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
+                <!-- Username Field -->
+                <div class="mb-6">
+                    <label for="{{ form.username.id }}" class="block text-sm font-medium text-gray-300 mb-2">
+                        <span class="flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            Username
+                        </span>
+                    </label>
+                    {{ form.username(class="form-input w-full px-4 py-3 text-white placeholder-gray-400 rounded-lg focus:outline-none", placeholder="Enter your username") }}
+                    {% if form.username.errors %}
+                        <div class="mt-1 text-red-400 text-sm">
+                            {{ form.username.errors[0] }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Password Field -->
+                <div class="mb-6">
+                    <label for="{{ form.password.id }}" class="block text-sm font-medium text-gray-300 mb-2">
+                        <span class="flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                            Password
+                        </span>
+                    </label>
+                    {{ form.password(class="form-input w-full px-4 py-3 text-white placeholder-gray-400 rounded-lg focus:outline-none", placeholder="Enter your password") }}
+                    {% if form.password.errors %}
+                        <div class="mt-1 text-red-400 text-sm">
+                            {{ form.password.errors[0] }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Submit Button -->
+                <div class="mb-6">
+                    {{ form.submit(class="btn-gradient w-full text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-lg transition-all duration-300 cursor-pointer") }}
+                </div>
+
+                <!-- Divider -->
+                <div class="relative mb-6">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-600"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-transparent text-gray-400">or</span>
+                    </div>
+                </div>
+
+                <!-- Additional Links -->
+                <div class="text-center space-y-3">
+                    <p class="text-gray-400 text-sm">
+                        Don't have an account? 
+                        <a href="/register" class="text-blue-400 hover:text-blue-300 transition-colors duration-300 font-medium">
+                            Create one here
+                        </a>
+                    </p>
+                </div>
+            </form>
+        </div>
+
+        <!-- Footer Links -->
+        <div class="text-center mt-8 animate-fade-in-up delay-300">
+            <div class="flex justify-center space-x-6 text-sm text-gray-400">
+                <a href="/about" class="hover:text-white transition-colors duration-300">About</a>
+                <a href="/" class="hover:text-white transition-colors duration-300">Home</a>
+                <span class="text-gray-600">•</span>
+                <span>Secure • Private • Encrypted</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Badge -->
+    <div class="fixed bottom-4 right-4 glass-card px-4 py-2 rounded-lg text-xs text-gray-300 animate-fade-in-up delay-200">
+        <div class="flex items-center space-x-2">
+            <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 616 0z" clip-rule="evenodd"></path>
+            </svg>
+            <span>Secured with RSA-4096</span>
+        </div>
+    </div>
+</body>
+</html>

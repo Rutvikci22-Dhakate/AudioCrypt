@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Error - AudioCrypt</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-orange-900 to-gray-800 text-white min-h-screen flex items-center justify-center">
+    <div class="text-center max-w-md">
+        <h1 class="text-4xl font-bold mb-4">🛡️ Security Error</h1>
+        <h2 class="text-xl mb-6">CSRF Protection</h2>
+        <p class="text-gray-300 mb-4">{{ reason }}</p>
+        <p class="text-gray-400 mb-8 text-sm">This security error occurred to protect your account from malicious requests.</p>
+        <a href="/" class="bg-orange-600 hover:bg-orange-700 px-6 py-3 rounded-lg font-semibold transition-colors">
+            Go Home
+        </a>
+    </div>
+</body>
+</html>

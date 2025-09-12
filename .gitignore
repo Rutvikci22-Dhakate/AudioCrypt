@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Flask
+instance/
+.webassets-cache
+
+# Environment variables
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Application specific
+uploads/*.enc
+uploads/*.mp3
+uploads/*.wav
+uploads/*.flac
+uploads/*.ogg
+uploads/*.m4a
+decrypted/*
+flask_session/*
+audiocrypt.log
+*.log
+
+# Backup files
+backup_*/
+*.bak
+*.backup
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Documentation
+docs/_build/
