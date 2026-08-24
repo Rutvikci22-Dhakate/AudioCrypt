@@ -168,15 +168,6 @@ docker run -d -p 5000:5000 --name audiocrypt-app audiocrypt
 4. **Data**: Hybrid RSA+AES encryption
 5. **Storage**: Private keys encrypted at rest
 
-## 📊 **Performance**
-
-### **Benchmarks**
-- **Encryption Speed**: ~50 MB/s (AES-256-GCM)
-- **Key Generation**: ~2-3 seconds (RSA-4096)
-- **File Processing**: Real-time for files up to 16MB
-- **Memory Usage**: ~50MB base + file size
-- **Database Queries**: Optimized with indexing
-
 ## 🤝 **Contributing**
 
 1. Fork the repository
